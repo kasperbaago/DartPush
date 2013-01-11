@@ -1,5 +1,5 @@
 <?php
-namespace MyApp;
+namespace ServApp;
 use Ratchet\Wamp\WampServerInterface;
 use Ratchet\ConnectionInterface;
 
