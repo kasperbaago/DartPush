@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="/scripts/when.js"></script> //  You will have to download when.js
+    <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        var conn = new ab.Session('ws://10.128.67.51:8000', function() {
+            this.subscribe('dartupdate', function(topic, data) {
+                console.log('New data from server ' + topic + data.msg);
+            })
+        }, function() {
+            console.log('WebSocket connection closed');
+        }, {
+            'skipSubprotocolCheck' : true
+        });
+    </script>
+</body>
+</html>
