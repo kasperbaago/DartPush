@@ -8,7 +8,7 @@ class MainController extends AppController
     public $uses = null;
 
     public function index($i = null) {
-        echo "HEJ!";
-        $this->set('page_title', 'TEST!');
+        $this->set("title_for_layout", "Hallo");
+        $this->set('MenuTest', 'hej');
     }
 }
