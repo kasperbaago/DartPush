@@ -12,9 +12,7 @@ class MainController extends AppController
     }
 
     public function test() {
-        $this->Game->load(1);
-        var_dump($this->Game->getGameName());
-        $this->Game->delete();
-        var_dump($this->Game->getPlayers());
+        $this->Game->createGame('The new game', 'New dart game!');
+        $this->Game->save();
     }
 }

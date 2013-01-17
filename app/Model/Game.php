@@ -64,7 +64,7 @@ class Game extends AppModel
     }
 
     public function save($data = NULL, $validate = true, $fieldList = Array()) {
-        $dataToSave = array('gameName' => $this->gameName, 'gameDescription' => $this->gameDesc);
+        $dataToSave = array('GameName' => $this->gameName, 'Description' => $this->gameDesc);
         parent::save($dataToSave);
     }
 
