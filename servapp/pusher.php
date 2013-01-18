@@ -8,8 +8,8 @@ class Pusher implements WampServerInterface
 
     protected $subscriptions = array();
 
-    public function onScoreUpdate($data) {
-        $entryData = json_decode($data);
+    public function onScoreUpdate($data = array()) {
+        $entryData = json_decode($data, true);
         if(!array_key_exists($entryData['subscription'], $this->subscriptions)) {
             return;
         }
@@ -73,7 +73,7 @@ class Pusher implements WampServerInterface
             $this->subscriptions[$topic->getId()] = $topic;
         }
 
-        error_log('New subscription made'. $topic);
+        error_log('New subscription made '. $topic);
     }
 
     /**

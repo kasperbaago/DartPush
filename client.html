@@ -9,7 +9,7 @@
     <script type="text/javascript">
         var conn = new ab.Session('ws://10.128.67.51:8000', function() {
             this.subscribe('dartupdate', function(topic, data) {
-                console.log('New data from server ' + topic + data.msg);
+                console.log('New data from server ' + topic + data);
             })
         }, function() {
             console.log('WebSocket connection closed');

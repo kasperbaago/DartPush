@@ -16,4 +16,14 @@ class PlayerThrow extends AppModel
 
     private $round = 0;
     private $score = 0;
+
+    public function addScore($score, $playerid, $round) {
+        $this->score = $score;
+        $this->round = $round;
+        $this->Player->load($playerid);
+    }
+
+    public function save($data = NULL, $validate = true, $fieldList = Array()) {
+
+    }
 }
