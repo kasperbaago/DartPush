@@ -23,7 +23,7 @@ class Player extends AppModel
 
     public function getPlayerName()
     {
-        return $this->playerName;
+        return $this->data['player_name'];
     }
 
     public function setActive($active = 1) {
@@ -46,13 +46,13 @@ class Player extends AppModel
         $output = array();
 
         foreach($res as $score) {
-            $round = $score['totalScore'];
+            $round = $score['PlayerThrow']['round'];
             if(!isset($output['totalScore'][$round])) {
                 $output['totalScore'][$round] = 501;
             }
 
-            $output['totalScore'][$round] -= $score['score'];
-            $output['arrowScore'][$score['arrow']] = $score['score'];
+            $output['totalScore'][$round] -= $score['PlayerThrow']['score'];
+            $output['arrowScore'][$score['PlayerThrow']['arrow']] = $score['PlayerThrow']['score'];
         }
 
         return $output;

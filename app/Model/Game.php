@@ -54,7 +54,17 @@ class Game extends AppModel
 
     public function getPlayers()
     {
-        return $this->players;
+        $output = array();
+        foreach($this->players as $k => $player) {
+            $this->Player->create();
+            $this->Player->load($player['id'], $this->id);
+
+            $output['Player'][$k]['PlayerName'] = $this->Player->getPlayerName();
+            $output['Player'][$k]['active'] = $this->Player->getActive();
+            $output['Player'][$k]['score'] = $this->Player->calcScore();
+        }
+
+        return $output;
     }
 
     public function addPlayer($playerName = null) {
@@ -77,7 +87,7 @@ class Game extends AppModel
     }
 
     public function save($data = NULL, $validate = true, $fieldList = Array()) {
-        $dataToSave = array('GameName' => $this->gameName, 'Description' => $this->gameDesc);
+        $dataToSave = array('GameName' => $this->gameName, 'Description' => $this->gameDesc, 'Round' => $this->round);
         parent::save($dataToSave);
     }
 
@@ -89,38 +99,37 @@ class Game extends AppModel
         $this->Player->create();
         $this->Player->load($playerID, $this->id);
 
-        if($this->Player->getActve == 0) {
-            throw new Exception('Player have no more arrows in this round!');
-        }
-
         $this->PlayerThrow->create();
-        $this->PlayerThrow->addScore($this, $this->Player, $score);
-
-        if($this->getGameRound() == $this->PlayerThrow->getRound($this->id, $playerID) && $this->PlayerThrow->getArrow($this->id, $playerID) == 0) {
+        if($this->PlayerThrow->getArrow($this->id, $playerID, $this->round) === 0) {
             $this->Player->setActive(0);
             $this->Player->save($this->Player->data);
+        } else {
+            $this->PlayerThrow->addScore($this, $this->Player, $score);
         }
 
-        if($this->ifAllHasThrown()) {
-            $this->round += 1;
-            $this->save();
+        if($this->Player->getActive() == 0) {
+            throw new Exception('Player have no more arrows in this round!');
         }
     }
 
-    public function ifAllHasThrown() {
-        $throwers = 0;
-        $players = count($this->players);
+    public function nextRound() {
+        $this->activatePlayers();
+        $this->round +=1;
+        $this->save();
+    }
 
+    public function activatePlayers() {
         foreach($this->players as $player) {
-            if($player['active'] == 0) {
-                $throwers += 1;
-            }
+            $this->Player->create();
+            $this->Player->load($player['id'], $this->id);
+            $this->Player->setActive(1);
+            $this->Player->save($this->Player->data);
         }
-
-        return ($throwers >= $players);
     }
 
-    public function getGameRound() {
+    public function getRound()
+    {
         return $this->round;
     }
+
 }
