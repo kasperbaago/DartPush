@@ -14,6 +14,19 @@ class Game extends AppModel
     private $throws;
     private $round = 0;
 
+    public function load($id = null) {
+        if(!is_numeric($id)) return false;
+        $res = $this->find('first', array('conditions' => array('Game.id' => $id)));
+        if($res == false) return false;
+        $this->id = $id;
+        $this->gameName = $res['Game']['GameName'];
+        $this->gameDesc = $res['Game']['Description'];
+        $this->round = $res['Game']['Round'];
+        $this->players = $res['Player'];
+        $this->throws = $res['PlayerThrow'];
+        return true;
+    }
+
     public function createGame($name = null, $description = null) {
         $this->setGameName($name);
         $this->setGameDesc($description);
@@ -68,17 +81,12 @@ class Game extends AppModel
         parent::save($dataToSave);
     }
 
-    public function load($id = null) {
-        if(!is_numeric($id)) return false;
-        $res = $this->find('first', array('conditions' => array('Game.id' => $id)));
-        if($res == false) return false;
-        $this->id = $id;
-        $this->gameName = $res['Game']['GameName'];
-        $this->gameDesc = $res['Game']['Description'];
-        $this->round = $res['Game']['Round'];
-        $this->players = $res['Player'];
-        $this->throws = $res['PlayerThrow'];
-        return true;
+
+    public function addScore($playerID = 0) {
+
     }
 
+    public function getGameRound() {
+
+    }
 }
