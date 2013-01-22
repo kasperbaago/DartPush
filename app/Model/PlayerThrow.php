@@ -14,6 +14,8 @@ class PlayerThrow extends AppModel
         'foreignKey' => 'game_id'
     ));
 
+    private $numberOfArrows = 3;
+
     /**
      * Adds a new score to the game
      * @param array $saveArray
@@ -69,7 +71,7 @@ class PlayerThrow extends AppModel
             $arrow = $res['PlayerThrow']['arrow'];
         }
 
-        if($arrow >= 3) {
+        if($arrow >= $this->numberOfArrows) {
             return (int) 0;
         }
 
