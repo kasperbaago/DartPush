@@ -9,18 +9,16 @@ class Player extends AppModel
     public $hasMany = array('PlayerThrow');
     public $belongsTo = array('Games' => array('className' => 'Game', 'foreignKey' => 'game_id'));
 
-    protected $playerName = "Unknown";
-    protected $gameID = null;
 
     public function newPlayer($playerName = null, $gameId = null) {
         $this->setPlayerName($playerName);
-        $this->gameID = $gameId;
-        $this->save();
+        $this->data['game_id'] = $gameId;
+        $this->save($this->data);
     }
 
     public function setPlayerName($playerName)
     {
-        $this->playerName = $playerName;
+        $this->data['player_name'] = $playerName;
     }
 
     public function getPlayerName()
@@ -28,18 +26,44 @@ class Player extends AppModel
         return $this->playerName;
     }
 
-    public function save($data = NULL, $validate = true, $fieldList = Array()) {
-        $dataToSave = array('player_name' => $this->playerName, 'game_id' => $this->gameID);
-        parent::save($dataToSave);
+    public function setActive($active = 1) {
+        $this->data['active'] = $active;
+    }
+
+    public function getActive() {
+        return $this->data['active'];
+    }
+
+    /**
+     * Calculates score for individual player
+     * @return array
+     */
+    public function calcScore() {
+        $res = $this->PlayerThrow->find('all', array(
+           'conditions' => array('PlayerThrow.player_id' => $this->id)
+        ));
+
+        $output = array();
+
+        foreach($res as $score) {
+            $round = $score['totalScore'];
+            if(!isset($output['totalScore'][$round])) {
+                $output['totalScore'][$round] = 501;
+            }
+
+            $output['totalScore'][$round] -= $score['score'];
+            $output['arrowScore'][$score['arrow']] = $score['score'];
+        }
+
+        return $output;
     }
 
     public function load($id, $gameID) {
         if(!is_numeric($id)) return false;
         $res = $this->find('first', array('conditions' => array('Player.id' => $id, 'Player.game_id' => $gameID)));
         if($res == false) return false;
-        $this->playerName = $res['Player']['player_name'];
+        $this->data = $res['Player'];
         $this->id = $id;
         return true;
     }
-
 }
