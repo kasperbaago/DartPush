@@ -18,17 +18,17 @@ class PlayerThrow extends AppModel
      * Adds a new score to the game
      * @param array $saveArray
      */
-    public function addScore(Array $saveArray) {
-        $this->data['score'] = $saveArray['score'];
-        $this->data['player_id'] = $saveArray['player_id'];
-        $this->data['game_id'] = $saveArray['game_id'];
-        $this->data['round'] = $saveArray['round'];
-        $this->data['arrow'] = $saveArray['arrow'];
+    public function addScore($game, $player, $score) {
+        $this->data['score'] = $score;
+        $this->data['player_id'] = (int) $player->id;
+        $this->data['game_id'] = (int) $game->id;
+        $this->data['round'] = (int) $game->getRound();
+        $this->data['arrow'] = (int) $this->getArrow($game->id, $player->id, $game->getRound());
         $this->save($this->data);
     }
 
     /**
-     * Get lates round added to round
+     * Get latest round added to round
      * @param int $gameID
      * @return int
      */
@@ -57,9 +57,9 @@ class PlayerThrow extends AppModel
      * @param $playerID
      * @return int
      */
-    public function getArrow($gameID, $playerID) {
+    public function getArrow($gameID, $playerID, $round) {
         $res = $this->find('first', array(
-            'condition' => array('PlayerThrow.game_id' => $gameID, 'PlayerThrow.player_id' => $playerID),
+            'conditions' => array('PlayerThrow.game_id' => $gameID, 'PlayerThrow.player_id' => $playerID, 'PlayerThrow.round' => $round),
             'order' => array('PlayerThrow.modified DESC')
         ));
 
@@ -70,9 +70,9 @@ class PlayerThrow extends AppModel
         }
 
         if($arrow >= 3) {
-            return 0;
+            return (int) 0;
         }
 
-        return $arrow + 1;
+        return (int) $arrow + 1;
     }
 }
