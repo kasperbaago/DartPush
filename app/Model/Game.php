@@ -81,12 +81,46 @@ class Game extends AppModel
         parent::save($dataToSave);
     }
 
+    /**
+     * Adds a specific score to a specific player
+     * @param int $playerID
+     */
+    public function addScore($playerID, $score) {
+        $this->Player->create();
+        $this->Player->load($playerID, $this->id);
 
-    public function addScore($playerID = 0) {
+        if($this->Player->getActve == 0) {
+            throw new Exception('Player have no more arrows in this round!');
+        }
 
+        $this->PlayerThrow->create();
+        $this->PlayerThrow->addScore($this, $this->Player, $score);
+
+        if($this->getGameRound() == $this->PlayerThrow->getRound($this->id, $playerID) && $this->PlayerThrow->getArrow($this->id, $playerID) == 0) {
+            $this->Player->setActive(0);
+            $this->Player->save($this->Player->data);
+        }
+
+        if($this->ifAllHasThrown()) {
+            $this->round += 1;
+            $this->save();
+        }
+    }
+
+    public function ifAllHasThrown() {
+        $throwers = 0;
+        $players = count($this->players);
+
+        foreach($this->players as $player) {
+            if($player['active'] == 0) {
+                $throwers += 1;
+            }
+        }
+
+        return ($throwers >= $players);
     }
 
     public function getGameRound() {
-
+        return $this->round;
     }
 }
