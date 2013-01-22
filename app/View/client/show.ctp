@@ -8,10 +8,11 @@
    <?php }}?>
     <input type="hidden" id="playerid" name="playerid" value="0" />
 </div>
-<div id="scoreinput" class="row-fluid">
-    <input type="number" id="score" name="score" tabindex="1" placeholder="Enter player score here" class="span" required="true"/>
-    <input type="submit" value="Submit score" class="btn btn-primary"/>
-    <button type="button" class="btn btn-small" data-toggle="modal" data-target="#newPlayerWindow">Add new playerr</button>
+<div id="scoreinput" class="row">
+    <input type="number" id="score" name="score" tabindex="1" placeholder="Enter player score here" class="span9" required="true"/>
+    <input type="submit" value="Submit score" class="btn btn-primary span2"/>
+    <button type="button" class="btn btn-small span5" data-toggle="modal" data-target="#newPlayerWindow">Add new player</button>
+    <button type="button" class="btn btn-small span5" data-toggle="modal" data-target="#scoreboardWindow">Show scoreboard</button>
 </div>
 </form>
 <div id="newPlayerWindow" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
