@@ -62,6 +62,7 @@ class Game extends AppModel
             $output['Player'][$k]['PlayerName'] = $this->Player->getPlayerName();
             $output['Player'][$k]['active'] = $this->Player->getActive();
             $output['Player'][$k]['score'] = $this->Player->calcScore();
+            $output['Player'][$k]['id'] = $this->Player->id;
         }
 
         return $output;

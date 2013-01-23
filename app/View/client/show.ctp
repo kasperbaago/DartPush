@@ -1,4 +1,4 @@
-<h1><?php echo $title_for_layout ?> - Round: <?php echo $round ?></h1>
+<h1><?php echo $title_for_layout ?> - Round: <span id='round'><?php echo $round ?></span></h1>
 <form method="post" id="updateScore">
 <p>Choose player and enter score: </p>
 <div id="playerlist" class="btn-group" data-toggle="buttons-radio">
@@ -22,7 +22,7 @@
         <button type="button" class="btn" data-toggle="modal" data-target="#scoreboardWindow">Show scoreboard</button>
     </div>
     <div class="span4">
-        <button type="button" class="btn" data-toogle="modal" data-target="#alertBox">Next round!</button>
+        <button type="button" class="btn" id="startNextRound">Next round!</button>
     </div>
 </div>
 
@@ -54,36 +54,10 @@
 </div>
 <script type="text/javascript">
     (function($) {
-        document.getElementById('score').focus();
-
-        //Disable btn click
-        $('#playerlist').children('button').on('click', function(e) {
-            e.preventDefault();
-            jQuery('#playerid').val(jQuery(this).data('playerid'));
-        });
-
-        var item = $('#playerlist').children().get(0);
-        $(item).button('toggle');
-        jQuery('#playerid').val(jQuery(item).data('playerid'));
-
-        jQuery('#updateScore').submit(function(e) {
-            e.preventDefault();
-
-            var serilizedInput = jQuery(this).serialize();
-            $.post('<?php echo $this->Html->url(array('controller' => 'client', 'action' => 'saveScore'), true); ?>', serilizedInput, function(d) {
-                if(d.arrow == 0 || d.arrow == 3) {
-                    var playerId = $('#playerid').val();
-                    jQuery('[data-playerid=' + playerId + ']').addClass('btn-danger');
-                }
-
-                if(typeof d.error == "string") {
-                    jQuery('#alertBox').find('p').html(d.error);
-                    jQuery('#alertBox').modal();
-                }
-
-            }, 'json');
-
-            console.log(serilizedInput);
-        })
+        var conf = {
+            updateScoreURL: '<?php echo $this->Html->url(array('controller' => 'client', 'action' => 'saveScore'), true) ?>',
+            nextRoundURL: '<?php echo $this->Html->url(array('controller' => 'client', 'action' => 'startNextRound'), true); ?>'
+        }
+        postContoller.init(<?php echo $gameID ?>, conf);
     })(jQuery)
 </script>
