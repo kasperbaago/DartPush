@@ -69,6 +69,7 @@ class Game extends AppModel
     }
 
     public function addPlayer($playerName = null) {
+        $this->Player->create();
         $this->Player->newPlayer($playerName, $this->id);
     }
 

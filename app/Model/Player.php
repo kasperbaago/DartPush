@@ -9,8 +9,8 @@ class Player extends AppModel
     public $hasMany = array('PlayerThrow');
     public $belongsTo = array('Games' => array('className' => 'Game', 'foreignKey' => 'game_id'));
 
-
     public function newPlayer($playerName = null, $gameId = null) {
+        if(!is_numeric($gameId)) return;
         $this->setPlayerName($playerName);
         $this->data['game_id'] = $gameId;
         $this->save($this->data);
