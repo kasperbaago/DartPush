@@ -16,28 +16,10 @@
 </form>
 <div class="row">
     <div class="span4">
-        <button type="button" class="btn" data-toggle="modal" data-target="#newPlayerWindow">Add new player</button>
-    </div>
-    <div class="span4">
         <button type="button" class="btn" data-toggle="modal" data-target="#scoreboardWindow">Show scoreboard</button>
     </div>
     <div class="span4">
         <button type="button" class="btn" id="startNextRound">Next round!</button>
-    </div>
-</div>
-
-<div id="newPlayerWindow" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="model-header">
-        <h3>Add new player: </h3>
-    </div>
-    <div class="modal-body">
-        <form method="post" id="addNewPlyer">
-            <input type="text" placeholder="Player name" name="newplayername" required="true"/>
-            <input type="submit" value="Add player" class="btn btn-block btn-primary" />
-        </form>
-    </div>
-    <div class="modal-footer">
-
     </div>
 </div>
 
